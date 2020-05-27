@@ -1,0 +1,23 @@
+server {
+    # Logging
+    access_log /var/log/nginx/__DOMAINNAME__.access.log;
+    error_log /var/log/nginx/__DOMAINNAME__.error.log;
+
+    server_name __DOMAINNAME__;
+
+    client_max_body_size 100M;
+
+    location = /favicon.ico {
+            access_log off;
+            log_not_found off;
+    }
+
+    location /static/ {
+            root __ROOTDIR__;
+    }
+
+    location / {
+            include proxy_params;
+            proxy_pass http://unix:/run/__SOCKETNAME__.sock;
+    }
+}
